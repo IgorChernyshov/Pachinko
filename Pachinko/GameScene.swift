@@ -10,17 +10,12 @@ import SpriteKit
 final class GameScene: SKScene, SKPhysicsContactDelegate {
 
 	// MARK: - Labels
-	private var ballsLabel: SKLabelNode!
 	private var editLabel: SKLabelNode!
+	private var scoreLabel: SKLabelNode!
+	private var ballsLabel: SKLabelNode!
 
 	// MARK: - Properties
 	private static let ballColors = ["Blue", "Cyan", "Green", "Grey", "Purple", "Red", "Yellow"]
-
-	private var ballsCount = 5 {
-		didSet {
-			ballsLabel.text = "Score: \(ballsCount)"
-		}
-	}
 
 	private var editingMode: Bool = false {
 		didSet {
@@ -29,6 +24,18 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 			} else {
 				editLabel.text = "Edit"
 			}
+		}
+	}
+
+	private var score = 0 {
+		didSet {
+			scoreLabel.text = "Score: \(score)"
+		}
+	}
+
+	private var ballsCount = 5 {
+		didSet {
+			ballsLabel.text = "Balls: \(ballsCount)"
 		}
 	}
 
@@ -54,16 +61,21 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 		makeBouncer(at: CGPoint(x: 768, y: 0))
 		makeBouncer(at: CGPoint(x: 1024, y: 0))
 
+		editLabel = SKLabelNode(fontNamed: "Chalkduster")
+		editLabel.text = "Edit"
+		editLabel.position = CGPoint(x: 80, y: 700)
+		addChild(editLabel)
+
+		scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
+		scoreLabel.text = "Score: \(score)"
+		scoreLabel.position = CGPoint(x: UIScreen.main.bounds.midY + 80, y: 700)
+		addChild(scoreLabel)
+
 		ballsLabel = SKLabelNode(fontNamed: "Chalkduster")
 		ballsLabel.text = "Balls: \(ballsCount)"
 		ballsLabel.horizontalAlignmentMode = .right
 		ballsLabel.position = CGPoint(x: 980, y: 700)
 		addChild(ballsLabel)
-
-		editLabel = SKLabelNode(fontNamed: "Chalkduster")
-		editLabel.text = "Edit"
-		editLabel.position = CGPoint(x: 80, y: 700)
-		addChild(editLabel)
 	}
 
 	// MARK: - Game Logic
@@ -103,6 +115,7 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 			destroy(object: ball)
 		} else if object.name == "box" {
 			destroy(object: object)
+			score += 1
 		}
 	}
 
