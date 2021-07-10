@@ -9,16 +9,18 @@ import SpriteKit
 
 final class GameScene: SKScene, SKPhysicsContactDelegate {
 
-	// MARK: - Properties
-	private var scoreLabel: SKLabelNode!
+	// MARK: - Labels
+	private var ballsLabel: SKLabelNode!
+	private var editLabel: SKLabelNode!
 
-	private var score = 0 {
+	// MARK: - Properties
+	private static let ballColors = ["Blue", "Cyan", "Green", "Grey", "Purple", "Red", "Yellow"]
+
+	private var ballsCount = 5 {
 		didSet {
-			scoreLabel.text = "Score: \(score)"
+			ballsLabel.text = "Score: \(ballsCount)"
 		}
 	}
-
-	private var editLabel: SKLabelNode!
 
 	private var editingMode: Bool = false {
 		didSet {
@@ -52,11 +54,11 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 		makeBouncer(at: CGPoint(x: 768, y: 0))
 		makeBouncer(at: CGPoint(x: 1024, y: 0))
 
-		scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
-		scoreLabel.text = "Score: 0"
-		scoreLabel.horizontalAlignmentMode = .right
-		scoreLabel.position = CGPoint(x: 980, y: 700)
-		addChild(scoreLabel)
+		ballsLabel = SKLabelNode(fontNamed: "Chalkduster")
+		ballsLabel.text = "Balls: \(ballsCount)"
+		ballsLabel.horizontalAlignmentMode = .right
+		ballsLabel.position = CGPoint(x: 980, y: 700)
+		addChild(ballsLabel)
 
 		editLabel = SKLabelNode(fontNamed: "Chalkduster")
 		editLabel.text = "Edit"
@@ -95,16 +97,21 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 
 	func collisionBetween(ball: SKNode, object: SKNode) {
 		if object.name == "good" {
-			destroy(ball: ball)
-			score += 1
+			destroy(object: ball)
+			ballsCount += 1
 		} else if object.name == "bad" {
-			destroy(ball: ball)
-			score -= 1
+			destroy(object: ball)
+		} else if object.name == "box" {
+			destroy(object: object)
 		}
 	}
 
-	private func destroy(ball: SKNode) {
-		ball.removeFromParent()
+	private func destroy(object: SKNode) {
+		if let fireParticles = SKEmitterNode(fileNamed: "FireParticles") {
+			fireParticles.position = object.position
+			addChild(fireParticles)
+		}
+		object.removeFromParent()
 	}
 
 	// MARK: - Objects Production
@@ -140,18 +147,24 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 	}
 
 	private func makeBall(at position: CGPoint) {
-		let ball = SKSpriteNode(imageNamed: "ballRed")
+		if ballsCount <= 0 { return makePuff(at: position) }
+		if position.y < 600 { return blinkBorder() }
+		let ballName = "ball\(GameScene.ballColors.randomElement() ?? "Red")"
+		let ball = SKSpriteNode(imageNamed: ballName)
 		ball.name = "ball"
 		ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width * 0.5)
 		ball.physicsBody!.contactTestBitMask = ball.physicsBody!.collisionBitMask
 		ball.physicsBody?.restitution = 0.4
 		ball.position = position
 		addChild(ball)
+		ballsCount -= 1
 	}
 
 	private func makeBox(at position: CGPoint) {
+		if position.y > 600 { return blinkBorder() }
 		let size = CGSize(width: Int.random(in: 16...128), height: 16)
 		let box = SKSpriteNode(color: UIColor(red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1), size: size)
+		box.name = "box"
 		box.zRotation = CGFloat.random(in: 0...3)
 		box.position = position
 
@@ -159,5 +172,20 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
 		box.physicsBody?.isDynamic = false
 
 		addChild(box)
+	}
+
+	private func blinkBorder() {
+		let border = SKSpriteNode(color: .red, size: CGSize(width: UIScreen.main.bounds.maxX, height: 4))
+		border.position = CGPoint(x: UIScreen.main.bounds.midX, y: 600)
+		addChild(border)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			border.removeFromParent()
+		}
+	}
+
+	private func makePuff(at position: CGPoint) {
+		guard let puff = SKEmitterNode(fileNamed: "PuffParticles") else { return }
+		puff.position = position
+		addChild(puff)
 	}
 }

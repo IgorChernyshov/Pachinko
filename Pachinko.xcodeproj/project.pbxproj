@@ -13,6 +13,8 @@
 		D61422752696399800918468 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61422742696399800918468 /* GameViewController.swift */; };
 		D61422782696399800918468 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D61422762696399800918468 /* Main.storyboard */; };
 		D614227A2696399900918468 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61422792696399900918468 /* Assets.xcassets */; };
+		D61425A02699809D00918468 /* FireParticles.sks in Resources */ = {isa = PBXBuildFile; fileRef = D614259F2699809D00918468 /* FireParticles.sks */; };
+		D61425A72699892300918468 /* PuffParticles.sks in Resources */ = {isa = PBXBuildFile; fileRef = D61425A62699892300918468 /* PuffParticles.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		D61422772696399800918468 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D61422792696399900918468 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D614227B2696399900918468 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D614259F2699809D00918468 /* FireParticles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireParticles.sks; sourceTree = "<group>"; };
+		D61425A62699892300918468 /* PuffParticles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PuffParticles.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 				D61422762696399800918468 /* Main.storyboard */,
 				D61422792696399900918468 /* Assets.xcassets */,
 				D614227B2696399900918468 /* Info.plist */,
+				D614259F2699809D00918468 /* FireParticles.sks */,
+				D61425A62699892300918468 /* PuffParticles.sks */,
 			);
 			path = Pachinko;
 			sourceTree = "<group>";
@@ -125,6 +131,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D61422782696399800918468 /* Main.storyboard in Resources */,
+				D61425A02699809D00918468 /* FireParticles.sks in Resources */,
+				D61425A72699892300918468 /* PuffParticles.sks in Resources */,
 				D614226F2696399800918468 /* GameScene.sks in Resources */,
 				D614227A2696399900918468 /* Assets.xcassets in Resources */,
 			);
